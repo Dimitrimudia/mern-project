@@ -11,34 +11,15 @@ const app = express();
 let url = "mongodb://192.168.1.166:27017/products";
 let dbName = 'products';
 
-mongoose.connect(url,{ useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(url,{ useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex :  true });
 let db = mongoose.connection;
 db.once('open', _=> {
 
     console.log('Database connected :', url)
-})
+});
 
 db.on('err', err =>{
     console.log('connection error :', err)
-})
-mongoose.connect(
-    url,
-    {
-        useNewUrlParser: true,
-        useUnifiedTopology: true 
-    },
-    (err, client)=>{
-        if(err)
-        {
-            console.log(err)
-        } 
-        else
-        {
-            db = client.db(dbName)
-            console.log(`Connected Mongodb : ${url}`)
-            console.log(`Database : ${dbName}`)
-        }
-      
 });
 
 app.use((req, res, next) => {
