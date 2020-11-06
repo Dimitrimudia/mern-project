@@ -1,16 +1,17 @@
-const Thing = require('../models/thing');
+const Product = require('../models/product');
 const fs = require('fs');
 
 
 
 exports.createThing = (req, res, next) => {
-  const thingObject = JSON.parse(req.body.thing);
-  delete thingObject._id;
-  const thing = new Thing({
-  ...thingObject,
+  const productObject = JSON.parse(req.body.product);
+  delete productObject._id;
+  const product = new Product({
+  ...productObject,
   imageUrl : `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
   });
-  thing.save().then(
+  
+  product.save().then(
     () => {
       res.status(201).json({
         message: 'Product saved successfully!'
@@ -26,11 +27,11 @@ exports.createThing = (req, res, next) => {
 };
 
 exports.getOneThing = (req, res, next) => {
-  Thing.findOne({
+  Product.findOne({
     _id: req.params.id
   }).then(
-    (thing) => {
-      res.status(200).json(thing);
+    (product) => {
+      res.status(200).json(product);
     }
   ).catch(
     (error) => {
@@ -42,12 +43,12 @@ exports.getOneThing = (req, res, next) => {
 };
 
 exports.modifyThing = (req, res, next) => {
-  const thingObject = req.body.file ?
+  const productObject = req.body.file ?
   {
-    ...JSON.parse(req.body.thing),
+    ...JSON.parse(req.body.product),
     imageUrl : `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
   } : {...req.body};
-  Thing.updateOne({_id: req.params.id}, {...thingObject, _id:req.params.id }).then(
+  Product.updateOne({_id: req.params.id}, {...productObject, _id:req.params.id }).then(
     () => {
       res.status(201).json({
         message: 'Product updated successfully!'
@@ -63,12 +64,12 @@ exports.modifyThing = (req, res, next) => {
 };
 
 exports.deleteThing = (req, res, next) => {
-  Thing.findOne({ _id : res.params.id })
-    .then(thing => {
-      const filename = thing.imageUrl.split('/images/')[1];
+  Product.findOne({ _id : res.params.id })
+    .then(product => {
+      const filename = product.imageUrl.split('/images/')[1];
       fs.unlink(`images/${filename}`, () =>{
 
-        Thing.deleteOne({_id: req.params.id}).then(
+        Product.deleteOne({_id: req.params.id}).then(
           () => {
             res.status(200).json({
               message: 'Product Deleted!'
@@ -89,9 +90,9 @@ exports.deleteThing = (req, res, next) => {
 };
 
 exports.getAllStuff = (req, res, next) => {
-  Thing.find().then(
-    (things) => {
-      res.status(200).json(things);
+  Product.find().then(
+    (products) => {
+      res.status(200).json(products);
     }
   ).catch(
     (error) => {

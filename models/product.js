@@ -17,7 +17,7 @@ db.on('err', err =>{
 
 
 
-const thingSchema = mongoose.Schema({
+const productSchema = mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
   imageUrl: { type: String, required: true },
@@ -25,4 +25,4 @@ const thingSchema = mongoose.Schema({
   price: { type: Number, required: true },
 });
 
-module.exports = mongoose.model('Thing', thingSchema);
+module.exports = mongoose.model('Product', productSchema);
